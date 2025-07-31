@@ -2,6 +2,8 @@
 
 This is a visually engaging **Interactive Torchlight Effect** built using **HTML, CSS, and JavaScript**. Move your mouse (or finger on mobile) to simulate a torchlight that reveals hidden elements in a dark environment. Ideal for learning about mouse tracking, dynamic styling, and DOM interactions.
 
+---
+
 ## 🌟 Features
 
 - Real-time torchlight movement using mouse or touch input
@@ -10,11 +12,15 @@ This is a visually engaging **Interactive Torchlight Effect** built using **HTML
 - Responsive and performance-optimized
 - Horizontal layout with interactive image reveal
 
+---
+
 ## 📸 Preview
 
-!![Alt text](image.png)
-!!![Alt text](torchlight.gif)
+![Static Preview](image.png)  
+![Live Interaction GIF](torchlight.gif)  
 > Hover or touch to explore the hidden faces with a glowing torch effect.
+
+---
 
 ## 🚀 How It Works
 
@@ -25,28 +31,39 @@ This is a visually engaging **Interactive Torchlight Effect** built using **HTML
   - Border glow
   - Scaling (for subtle pop effect)
 
+---
+
 ## 🛠️ Technologies Used
 
 - HTML5
 - CSS3 (custom gradients, blend modes, shadows)
 - Vanilla JavaScript (DOM manipulation, animation)
 
+---
+
 ## 📁 Folder Structure
 
 interactive-torchlight-effect/
-├── index.html
 ├── 4a.jpg
 ├── 4b.jpg
 ├── 4c.jpg
 ├── indian_flag.png
+├── index.html
+├── image.png
+├── torchlight.gif
 └── README.md
 
-> Ensure all images (`.jpg` and `.png`) are in the same folder.
+
+> ⚠️ Ensure all images (`.jpg`, `.png`, `.gif`) are in the same folder.
+
+---
 
 ## 📱 Responsive?
 
-- 🖥️ Mouse tracking: Works best on desktops/laptops
-- 📱 Touch support: Works on phones/tablets too
+- 🖥️ Mouse tracking: Works best on desktops/laptops  
+- 📱 Touch support: Works smoothly on phones/tablets too
+
+---
 
 ## 🎯 Learning Outcomes
 
@@ -55,16 +72,17 @@ interactive-torchlight-effect/
 - Mapping distance to style (brightness, scale, opacity)
 - Visual feedback and interactivity principles
 
+---
+
 ## 📌 To Run Locally
 
 ```bash
-# From the root of WebMiniApps repo
+# From the root of the WebMiniApps repo:
 cd interactive-torchlight-effect
-open index.html  # or use Live Server in VS Code
-
+open index.html  # or right-click > "Open with Live Server" in VS Code
 🧠 Inspired By
 
-Torchlight reveal animations seen in:
+Torchlight reveal animations commonly used in:
 
     Game UIs
 
@@ -72,6 +90,5 @@ Torchlight reveal animations seen in:
 
     Interactive educational sites
 
-    👨‍💻 Made with ❤️ by CodeWithHps
-
+👨‍💻 Made with ❤️ by CodeWithHps
 
