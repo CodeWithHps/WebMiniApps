@@ -41,20 +41,10 @@ This is a visually engaging **Interactive Torchlight Effect** built using **HTML
 
 ---
 
-## 📁 Folder Structure
+📁 Folder Structure
+<pre> interactive-torchlight-effect/ ├── 4a.jpg ├── 4b.jpg ├── 4c.jpg ├── indian_flag.png ├── index.html ├── image.png ├── torchlight.gif └── README.md </pre>
 
-interactive-torchlight-effect/
-├── 4a.jpg
-├── 4b.jpg
-├── 4c.jpg
-├── indian_flag.png
-├── index.html
-├── image.png
-├── torchlight.gif
-└── README.md
-
-
-> ⚠️ Ensure all images (`.jpg`, `.png`, `.gif`) are in the same folder.
+    ⚠️ Ensure all images (.jpg, .png, .gif) are in the same folder.
 
 ---
 
