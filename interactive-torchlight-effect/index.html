@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Torchlight Effect - Horizontal</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            background-color: #000;
+            overflow: hidden;
+            font-family: 'Arial', sans-serif;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .reel-container {
+            position: relative;
+            /* Changed to 16:9 aspect ratio */
+            width: 1080px;
+            height: 608px; /* 1080 / 16 * 9 = 607.5, rounded */
+            margin: 0 auto;
+            overflow: hidden;
+            border-radius: 20px;
+            box-shadow: 0 0 30px rgba(255, 150, 50, 0.3);
+            background-color: #000; /* Ensure background is black */
+        }
+        .face {
+            position: absolute;
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background-size: cover;
+            background-position: center;
+            filter: brightness(0.15) contrast(1.2);
+            transition: all 0.6s cubic-bezier(0.25, 0.1, 0.25, 1);
+            /* Keep vertical centering */
+            top: 50%;
+            transform: translateY(-50%);
+            border: 2px solid rgba(255, 200, 100, 0.1);
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.8) inset;
+        }
+        /* Position faces horizontally */
+        #face1 {
+            left: 10%; /* Adjust percentages as needed for spacing */
+            background-image: url('indian_flag.png'); /* Ensure this path is correct */
+        }
+        #face2 {
+            left: 30%;
+            background-image: url('4a.jpg'); /* Ensure this path is correct */
+        }
+        #face3 {
+            left: 50%;
+            background-image: url('4c.jpg'); /* Ensure this path is correct */
+        }
+        #face4 {
+            left: 70%;
+            background-image: url('4b.jpg'); /* Ensure this path is correct */
+        }
+        .torch {
+            position: absolute;
+            width: 75px; /* Default size - can be adjusted */
+            height: 75px;
+            border-radius: 50%;
+            background: radial-gradient(
+                circle at center,
+                rgba(255, 220, 150, 0.9) 0%,
+                rgba(255, 180, 80, 0.5) 40%,
+                rgba(255, 120, 30, 0.2) 70%,
+                transparent 90%
+            );
+            /* Removed transform: translate(-50%, -50%); */
+            /* Add it via JS for precise control if needed, or position top/left directly */
+            mix-blend-mode: screen;
+            z-index: 10;
+            /* Improved for performance: change will-change if animating top/left directly */
+            /* will-change: transform; */
+            pointer-events: none; /* Crucial: let mouse events pass through */
+        }
+        .title {
+            position: absolute;
+            top: 5%;
+            left: 0;
+            right: 0;
+            text-align: center;
+            font-size: 2.5rem; /* Increased slightly for larger container */
+            font-weight: bold;
+            color: rgba(255, 255, 255, 0.1);
+            text-shadow: 0 0 15px rgba(255, 150, 50, 0);
+            transition: all 0.5s ease;
+            z-index: 20;
+            font-family: 'Arial Black', sans-serif;
+            letter-spacing: 2px;
+        }
+        .controls {
+            position: absolute;
+            bottom: 20px; /* Adjusted for larger container */
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: center;
+            gap: 15px; /* Increased gap */
+            z-index: 100;
+        }
+        .size-control {
+            background: rgba(0,0,0,0.7);
+            color: white;
+            border: 1px solid rgba(255,200,100,0.5);
+            padding: 8px 15px; /* Increased padding */
+            border-radius: 20px;
+            font-size: 1.1rem; /* Increased font size */
+            cursor: pointer; /* Ensure it looks clickable */
+        }
+        .instructions {
+            position: absolute;
+            top: 50%; /* Center vertically */
+            left: 0;
+            right: 0;
+            text-align: center;
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 1.3rem; /* Increased font size */
+            z-index: 5; /* Behind faces and torch */
+            text-shadow: 0 0 10px #000;
+            font-style: italic;
+            transform: translateY(-50%); /* Precise vertical centering */
+        }
+    </style>
+</head>
+<body>
+    <div class="reel-container">
+        <h1 class="title">INTERACTIVE TORCHLIGHT</h1>
+        <div class="face" id="face1"></div>
+        <div class="face" id="face2"></div>
+        <div class="face" id="face3"></div>
+        <div class="face" id="face4"></div>
+        <div class="torch" id="torch"></div>
+        <!-- <div class="instructions">Move your mouse to reveal faces with torchlight</div> -->
+        <div class="controls">
+            <button class="size-control" id="increase-size">+ Torch Size</button>
+            <button class="size-control" id="decrease-size">- Torch Size</button>
+        </div>
+         <!-- Removed custom cursor elements -->
+    </div>
+
+    <script>
+        const container = document.querySelector('.reel-container');
+        const torch = document.getElementById('torch');
+        const faces = document.querySelectorAll('.face');
+        const title = document.querySelector('.title');
+        const increaseBtn = document.getElementById('increase-size');
+        const decreaseBtn = document.getElementById('decrease-size');
+
+        // Torch size control
+        let torchSize = 200;
+        increaseBtn.addEventListener('click', (e) => {
+             e.stopPropagation(); // Prevent triggering mousemove on container
+            torchSize = Math.min(300, torchSize + 20);
+            updateTorchSize();
+        });
+        decreaseBtn.addEventListener('click', (e) => {
+             e.stopPropagation(); // Prevent triggering mousemove on container
+            torchSize = Math.max(100, torchSize - 20);
+            updateTorchSize();
+        });
+
+        function updateTorchSize() {
+            torch.style.width = `${torchSize}px`;
+            torch.style.height = `${torchSize}px`;
+        }
+
+        // Update torch position and effects
+        function updateTorchPosition(e) {
+            const containerRect = container.getBoundingClientRect();
+
+            // Get mouse position relative to the container
+            const torchX = e.clientX - containerRect.left;
+            const torchY = e.clientY - containerRect.top;
+
+            // Update torch position using top/left for direct control
+            // The torch's center should be at the mouse position
+            torch.style.left = `${torchX}px`;
+            torch.style.top = `${torchY}px`;
+
+            // Illuminate title when torch is near
+            const titleRect = title.getBoundingClientRect();
+            // Calculate distance from torch center to title center
+            const titleCenterX = titleRect.left + titleRect.width / 2;
+            const titleCenterY = titleRect.top + titleRect.height / 2;
+            const containerOffsetLeft = containerRect.left;
+            const containerOffsetTop = containerRect.top;
+
+            const relativeTitleCenterX = titleCenterX - containerOffsetLeft;
+            const relativeTitleCenterY = titleCenterY - containerOffsetTop;
+
+            const titleDistance = Math.sqrt(
+                Math.pow(torchX - relativeTitleCenterX, 2) +
+                Math.pow(torchY - relativeTitleCenterY, 2)
+            );
+            if (titleDistance < 300) { // Increased distance threshold for larger screen
+                const titleBrightness = mapRange(titleDistance, 0, 300, 1, 0.1);
+                title.style.color = `rgba(255, 220, 150, ${titleBrightness})`;
+                title.style.textShadow = `0 0 ${mapRange(titleDistance, 0, 300, 30, 0)}px rgba(255, 180, 80, ${titleBrightness*0.7})`;
+            } else {
+                title.style.color = 'rgba(255, 255, 255, 0.1)';
+                title.style.textShadow = '0 0 15px rgba(255, 150, 50, 0)';
+            }
+
+            // Check if torch is over any face
+            faces.forEach(face => {
+                const faceRect = face.getBoundingClientRect();
+                // Calculate distance from torch center to face center
+                const faceCenterX = faceRect.left + faceRect.width / 2;
+                const faceCenterY = faceRect.top + faceRect.height / 2;
+
+                const relativeFaceCenterX = faceCenterX - containerOffsetLeft;
+                const relativeFaceCenterY = faceCenterY - containerOffsetTop;
+
+                const distance = Math.sqrt(
+                    Math.pow(torchX - relativeFaceCenterX, 2) +
+                    Math.pow(torchY - relativeFaceCenterY, 2)
+                );
+                // If torch is near the face, brighten it with glow effect
+                if (distance < torchSize/2 + 30) {
+                    const brightness = mapRange(distance, 0, torchSize/2 + 30, 1.2, 0.15);
+                    const glow = mapRange(distance, 0, torchSize/2 + 30, 1, 0);
+                    face.style.filter = `brightness(${brightness}) contrast(1.2)`;
+                    face.style.boxShadow = `0 0 ${glow * 30}px rgba(255, 200, 100, ${glow * 0.7}),
+                                          0 0 30px rgba(0, 0, 0, 0.8) inset`;
+                    face.style.border = `2px solid rgba(255, 220, 150, ${glow * 0.5})`;
+                    face.style.transform = `translateY(-50%) scale(${1 + glow * 0.05})`; /* Adjusted for horizontal layout */
+                } else {
+                    face.style.filter = 'brightness(0.15) contrast(1.2)';
+                    face.style.boxShadow = '0 0 30px rgba(0, 0, 0, 0.8) inset';
+                    face.style.border = '2px solid rgba(255, 200, 100, 0.1)';
+                    face.style.transform = 'translateY(-50%) scale(1)'; /* Adjusted for horizontal layout */
+                }
+            });
+        }
+
+        // Helper function to map range
+        function mapRange(value, inMin, inMax, outMin, outMax) {
+            return (value - inMin) * (outMax - outMin) / (inMax - inMin) + outMin;
+        }
+
+        // Handle mouse movement within the container
+        container.addEventListener('mousemove', updateTorchPosition);
+
+        // Handle touch movement within the container
+        container.addEventListener('touchmove', (e) => {
+            e.preventDefault();
+            updateTorchPosition({
+                clientX: e.touches[0].clientX,
+                clientY: e.touches[0].clientY
+            });
+        }, { passive: false }); // Prevent default behavior for touch
+
+        // Initial setup (center torch)
+        // updateTorchPosition({clientX: window.innerWidth / 2, clientY: window.innerHeight / 2});
+
+        // Add flickering effect to torch
+        setInterval(() => {
+            // Torch flicker
+            const flicker = Math.random() * 0.2 + 0.9;
+            torch.style.opacity = flicker;
+            // Random slight movement for flicker effect
+            const dx = (Math.random() - 0.5) * 8;
+            const dy = (Math.random() - 0.5) * 8;
+            // Adjust positioning to flicker around the mouse-set position
+            // This requires calculating the base position or using transform
+            // Let's use transform for the flicker, as it's relative
+             torch.style.transform = `translate(calc(-50% + ${dx}px), calc(-50% + ${dy}px))`;
+        }, 50);
+
+    </script>
+</body>
+</html>

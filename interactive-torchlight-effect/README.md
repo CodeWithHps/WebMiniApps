@@ -13,7 +13,7 @@ This is a visually engaging **Interactive Torchlight Effect** built using **HTML
 ## 📸 Preview
 
 !![Alt text](image.png)
-
+!!![Alt text](torchlight.gif)
 > Hover or touch to explore the hidden faces with a glowing torch effect.
 
 ## 🚀 How It Works
@@ -32,6 +32,7 @@ This is a visually engaging **Interactive Torchlight Effect** built using **HTML
 - Vanilla JavaScript (DOM manipulation, animation)
 
 ## 📁 Folder Structure
+
 interactive-torchlight-effect/
 ├── index.html
 ├── 4a.jpg
@@ -73,4 +74,4 @@ Torchlight reveal animations seen in:
 
     👨‍💻 Made with ❤️ by CodeWithHps
 
-    
+
